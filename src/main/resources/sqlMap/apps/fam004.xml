@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+            PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+            "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="FAM004">
+	<select id="getListUnion4" resultClass="jp.co.cyms.apps.fam004.bean.Pam0041Bean" parameterClass="jp.co.cyms.apps.fam004.bean.Pam0041Bean">
+		SELECT
+			U5.CATEGORY AS CATEGORY,
+			U5.CLASS AS CLASSUNION4,
+			U5.CD1_PK AS CD1PK,
+			U5.CD2_PK AS CD2PK,
+			U5.NAME AS NAME,
+			U5.COLUMN_1 AS COLUMN1,
+			U5.COLUMN_2 AS COLUMN2,
+			U5.COLUMN_3 AS COLUMN3,
+			U5.COLUMN_4 AS COLUMN4,
+			U5.COLUMN_5 AS COLUMN5
+		FROM UN5_MST U5
+		WHERE
+			U5.SYSTEM_ID = #systemId#
+			<!-- AND CUSTOMER_CD = #customerCd# -->
+		ORDER BY LOWER(CATEGORY), CLASSUNION4, CD1PK, CD2PK
+	</select>
+
+	<select id="countUnion4" resultClass="int" parameterClass="jp.co.cyms.apps.fam004.bean.Pam0041Bean">
+		SELECT
+			COUNT(*)
+		FROM UN5_MST U5
+		WHERE
+			U5.SYSTEM_ID = #systemId#
+			AND	U5.CATEGORY = #category#
+			AND U5.CLASS = 	#classUnion4#
+			AND U5.CD1_PK = 	#cd1Pk#
+			AND U5.CD2_PK = 	#cd2Pk#
+			<!-- AND CUSTOMER_CD = #customerCd# -->
+	</select>
+
+	<select id="getUnion4" parameterClass="jp.co.cyms.apps.fam004.bean.Pam0041Bean"
+        resultClass="jp.co.cyms.apps.fam004.bean.Pam0041Bean">
+		SELECT
+			U4.CATEGORY AS CATEGORY,
+			U4.CLASS AS CLASSUNION4,
+			U4.CD1_PK AS CD1PK,
+			U4.CD2_PK AS CD2PK,
+			U4.NAME AS NAME,
+			U4.COLUMN_1 AS COLUMN1,
+			U4.COLUMN_2 AS COLUMN2,
+			U4.COLUMN_3 AS COLUMN3,
+			U4.COLUMN_4 AS COLUMN4,
+			U4.COLUMN_5 AS COLUMN5,
+			U4.EXCLUSIVE_FG AS exclusiveFg
+		FROM
+			UN4_MST U4
+		WHERE
+				U4.SYSTEM_ID = #systemId#
+			AND	U4.CATEGORY = #category#
+			AND U4.CLASS = 	#classUnion4#
+			AND U4.CD1_PK = 	#cd1Pk#
+			AND U4.CD2_PK = 	#cd2Pk#
+	</select>
+	
+	<select id="getUnion5" parameterClass="jp.co.cyms.apps.fam004.bean.Pam0041Bean"
+        resultClass="jp.co.cyms.apps.fam004.bean.Pam0041Bean">
+		SELECT
+			U5.CATEGORY AS CATEGORY,
+			U5.CLASS AS CLASSUNION4,
+			U5.CD1_PK AS CD1PK,
+			U5.CD2_PK AS CD2PK,
+			U5.NAME AS NAME,
+			U5.COLUMN_1 AS COLUMN1,
+			U5.COLUMN_2 AS COLUMN2,
+			U5.COLUMN_3 AS COLUMN3,
+			U5.COLUMN_4 AS COLUMN4,
+			U5.COLUMN_5 AS COLUMN5,
+			U5.EXCLUSIVE_FG AS exclusiveFg
+		FROM
+			UN5_MST U5
+		WHERE
+				U5.SYSTEM_ID = #systemId#
+			AND	U5.CATEGORY = #category#
+			AND U5.CLASS = 	#classUnion4#
+			AND U5.CD1_PK = 	#cd1Pk#
+			AND U5.CD2_PK = 	#cd2Pk#
+			<!-- AND CUSTOMER_CD = #customerCd# -->
+	</select>
+	
+	<update id="updateUnion4" parameterClass="jp.co.cyms.apps.fam004.bean.Pam0041Bean">
+         UPDATE UN5_MST
+            SET NAME           =  #name#
+              ,COLUMN_1       =  #column1#
+              ,COLUMN_2       =  #column2#
+              ,COLUMN_3       =  #column3#
+              ,COLUMN_4       =  #column4#
+              ,COLUMN_5       =  #column5#
+              ,UPDATED_USER   =  #updatedUser#
+              ,UPDATED_DT_SERVER        =  SYSDATE
+              <dynamic>
+					<isNotNull property="timeZone">
+					,UPDATED_DT_UTC = SYSDATE -#timeZone#/24
+					</isNotNull>
+				</dynamic>
+
+              ,EXCLUSIVE_FG   = 0
+          WHERE SYSTEM_ID = #systemId#
+          AND CATEGORY = #category#
+          AND CLASS = #classUnion4#
+          AND CD1_PK = #cd1Pk#
+          AND CD2_PK = #cd2Pk#
+          <!-- AND CUSTOMER_CD = #customerCd# -->
+    </update>
+    <insert id="insertUnion4" parameterClass="jp.co.cyms.apps.fam004.bean.Pam0041Bean">
+        INSERT INTO UN5_MST (
+        	   SYSTEM_ID
+        	  ,CATEGORY
+              ,CLASS
+              ,CD1_PK
+              ,CD2_PK
+              ,NAME
+              ,COLUMN_1
+              ,COLUMN_2
+              ,COLUMN_3
+              ,COLUMN_4
+              ,COLUMN_5
+              <!-- ,CUSTOMER_CD -->
+              ,UPDATED_USER
+			  ,UPDATED_DT_SERVER
+			  <dynamic>
+					<isNotNull property="timeZone">
+					,UPDATED_DT_UTC
+					</isNotNull>
+				</dynamic>
+            ) VALUES (
+              #systemId#
+              ,#category#
+              ,#classUnion4#
+              ,#cd1Pk#
+              ,#cd2Pk#
+              ,#name#
+              ,#column1#
+              ,#column2#
+              ,#column3#
+              ,#column4#
+              ,#column5#
+              <!-- ,#customerCd# -->
+              ,#updatedUser#
+              ,SYSDATE
+              <dynamic>
+					<isNotNull property="timeZone">
+					,SYSDATE -#timeZone#/24
+					</isNotNull>
+				</dynamic>
+            )
+    </insert>
+        <delete id="deleteUnion4"
+            parameterClass="jp.co.cyms.apps.fam004.bean.Pam0041Bean">
+        DELETE
+        	FROM UN5_MST
+        WHERE
+        	  SYSTEM_ID = #systemId#
+          AND CATEGORY = #category#
+          AND CLASS = #classUnion4#
+          AND CD1_PK = #cd1Pk#
+          AND CD2_PK = #cd2Pk#
+         <!--  AND CUSTOMER_CD = #customerCd# -->
+    </delete>
+    <resultMap class="java.util.HashMap" id="messageMap">
+		<result property="CD2_PK" column="CD2_PK" />
+        <result property="NAME" column="NAME" />
+	</resultMap>
+    <select id="getUnion4Message" parameterClass="jp.co.cyms.apps.fam004.bean.Pam0041Bean"
+        resultMap="messageMap">
+		select
+			CD2_PK, NAME
+		from UN4_MST
+		where  CLASS = #classUnion4#
+	</select>
+	<update id="updateExclusiveFg" parameterClass="jp.co.cyms.apps.fam004.bean.Pam0041Bean">
+		UPDATE UN5_MST
+		SET
+			EXCLUSIVE_FG = #exclusiveFg#
+		WHERE
+			SYSTEM_ID = #systemId#
+          	AND CATEGORY = #category#
+          	AND CLASS = #classUnion4#
+          	AND CD1_PK = #cd1Pk#
+          	AND CD2_PK = #cd2Pk#
+          	<!-- AND CUSTOMER_CD = #customerCd# -->
+	</update>
+</sqlMap>

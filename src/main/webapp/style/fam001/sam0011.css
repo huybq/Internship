@@ -1,0 +1,47 @@
+body {
+	font-family: 'Tahoma', 'Arial', 'Times New Roman', 'Meiryo UI';
+}
+.class-title {
+	width: 22%;
+    margin-left: -5%;
+}
+
+.class-title-input {
+	margin-left: -5%;
+    width: 38%;
+}
+#category {
+	width: 26% !important;
+}
+
+#classMst {
+	width: 26% !important;
+}
+
+#cdPk {
+	width: 42% !important;
+}
+
+.div-name {
+	margin-left: -17%;
+}
+
+.lbl-name {
+	margin-left: -36%;
+}
+
+.sp-required {
+	color: red;
+}
+.content {
+	padding-top: 0px !important;
+}
+.div-delete {
+	pointer-events:none;
+}
+#union1-table_info{
+	float: left;
+}
+#union1-table_paginate{
+	float: right;
+}

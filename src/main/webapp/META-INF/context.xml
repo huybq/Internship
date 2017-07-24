@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   - 「データベースがMySqlの場合の設定」
+-->
+<!-- Server Test DEV -->
+<Context>
+  <Resource
+     name="dataSource"
+     type="javax.sql.DataSource"
+     driverClassName="oracle.jdbc.driver.OracleDriver"
+     password="intership"
+     username="intership"
+     url="jdbc:oracle:thin:@192.168.11.88:1521:CDMSNEW"
+     initialSize="10"
+     maxActive="100"
+     maxIdle="50"
+     maxWait="5000"
+     minIdle="10"
+     testWhileIdle="true"
+     timeBetweenEvictionRunsMillis="10000"
+     validationQuery="select 1 from dual"/>
+</Context> 
+

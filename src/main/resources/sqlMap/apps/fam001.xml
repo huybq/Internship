@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+            PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+            "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="FAM001">
+	<select id="selectFAM001" resultClass="jp.co.cyms.apps.fam001.bean.Pam0011Bean">
+		SELECT
+			CATEGORY as category,
+			CLASS as classMst,
+			CD_PK as cdPk,
+			NAME as name,
+			COLUMN_1 as column1,
+			COLUMN_2 as column2,
+			COLUMN_3 as column3,
+			COLUMN_4 as column4,
+			COLUMN_5 as column5,
+			TIME_1 as time1,
+			UPDATE_USER as updateUser,
+			UPDATED_DT_UTC as updatedDtUtc,
+			UPDATED_DT_SERVER as updatedDtServer,
+			EXCLUSIVE_FG as exclusiveFg
+		FROM
+			UN1_MST
+		ORDER BY LOWER(category), classMst, cdPk
+	</select>
+	<select id="selectFAM001ById" parameterClass="jp.co.cyms.apps.fam001.bean.Pam0011Bean" resultClass="jp.co.cyms.apps.fam001.bean.Pam0011Bean">
+		SELECT
+			CATEGORY as category,
+			CLASS as classMst,
+			CD_PK as cdPk,
+			NAME as name,
+			COLUMN_1 as column1,
+			COLUMN_2 as column2,
+			COLUMN_3 as column3,
+			COLUMN_4 as column4,
+			COLUMN_5 as column5,
+			TIME_1 as time1,
+			UPDATE_USER as updateUser,
+			UPDATED_DT_UTC as updatedDtUtc,
+			UPDATED_DT_SERVER as updatedDtServer,
+			EXCLUSIVE_FG as exclusiveFg
+		FROM
+			UN1_MST
+		WHERE
+			CATEGORY = #category#
+			AND CLASS = #classMst#
+			AND CD_PK = #cdPk#
+	</select>
+	<delete id="deleteFAM001" parameterClass="jp.co.cyms.apps.fam001.bean.Pam0011Bean">
+		DELETE FROM UN1_MST
+		WHERE
+			CATEGORY = #category#
+			AND CLASS = #classMst#
+			AND CD_PK = #cdPk#
+	</delete>
+	<update id="updateFAM001" parameterClass="jp.co.cyms.apps.fam001.bean.Pam0011Bean">
+		UPDATE UN1_MST
+		SET
+			NAME = #name#,
+			COLUMN_1 = #column1#,
+			COLUMN_2 = #column2#,
+			COLUMN_3 = #column3#,
+			COLUMN_4 = #column4#,
+			COLUMN_5 = #column5#,
+			TIME_1 = #time1#,
+			UPDATE_USER = #updateUser#,
+			EXCLUSIVE_FG = 0,
+			<dynamic>
+				<isNotNull property="timeZone">
+					UPDATED_DT_UTC = SYSDATE -#timeZone#/24,
+				</isNotNull>
+			</dynamic>
+			UPDATED_DT_SERVER = SYSDATE
+		WHERE
+			CATEGORY = #category#
+			AND CLASS = #classMst#
+			AND CD_PK = #cdPk#
+	</update>
+	<update id="updateExclusiveFg" parameterClass="jp.co.cyms.apps.fam001.bean.Pam0011Bean">
+		UPDATE UN1_MST
+		SET
+			EXCLUSIVE_FG = #exclusiveFg#
+		WHERE
+			CATEGORY = #category#
+			AND CLASS = #classMst#
+			AND CD_PK = #cdPk#
+	</update>
+	<insert id="insertFAM001" parameterClass="jp.co.cyms.apps.fam001.bean.Pam0011Bean">
+        INSERT INTO UN1_MST (
+        	   CATEGORY
+        	  ,CLASS
+              ,CD_PK
+              ,NAME
+              ,COLUMN_1
+              ,COLUMN_2
+              ,COLUMN_3
+              ,COLUMN_4
+              ,COLUMN_5
+              ,TIME_1
+              ,UPDATE_USER
+			  <dynamic>
+					<isNotNull property="timeZone">
+						,UPDATED_DT_UTC
+					</isNotNull>
+				</dynamic>
+			  ,UPDATED_DT_SERVER
+            ) VALUES (
+               #category#
+              ,#classMst#
+              ,#cdPk#
+              ,#name#
+              ,#column1#
+              ,#column2#
+              ,#column3#
+              ,#column4#
+              ,#column5#
+              ,#time1#
+              ,#updateUser#
+              <dynamic>
+    			<isNotNull property="timeZone">
+    				,SYSDATE -#timeZone#/24
+    			</isNotNull>
+   			  </dynamic>
+              ,SYSDATE
+            )
+    </insert>
+    <select id="selectScreenName" parameterClass="String" resultClass="String">
+		SELECT
+			NAME
+		FROM
+			MNU_MST
+		WHERE SCREEN_ID = #screenId# AND ROWNUM = 1
+	</select>
+	
+	<select id="selectSessionTimeOut" resultClass="String">
+		SELECT
+			COLUMN_1 as column1			
+		FROM
+			UN1_MST
+		WHERE
+			CATEGORY =	'WEB'
+			AND CLASS = '01'
+			AND CD_PK = '01'
+	</select>
+	
+</sqlMap>

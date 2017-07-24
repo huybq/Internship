@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+            PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+            "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="FAM007S">
+	<select id="getLoadingport" resultClass="jp.co.cyms.apps.fam007s.bean.Un2MstBean" parameterClass="jp.co.cyms.apps.fam007s.bean.Pam0071SBean">
+		SELECT
+			CD_PK cdpk,
+		  	CD_PK loadingPort,
+		  	SHORT_NAME shortName
+		FROM UN2_MST
+		WHERE
+			SYSTEM_ID = #systemId#
+			AND CLASS = #classParam#
+			AND TYPE_CD = #typeCd#
+			ORDER BY SHORT_NAME
+	</select>
+	<select id="getBaseDateMain" resultClass="jp.co.cyms.apps.fam007s.bean.Un1MstBean" parameterClass="jp.co.cyms.apps.fam007s.bean.Pam0071SBean">
+		SELECT 
+			U1.NAME
+			,U1.CD_PK baseDate 
+		FROM UN1_MST U1
+		WHERE U1.CATEGORY = #category#
+			AND U1.CLASS = #classParam#
+			ORDER BY U1.CD_PK
+	</select>
+	<select id="searchBaseDateMain" resultClass="jp.co.cyms.apps.fam007s.bean.StdMstHBean" parameterClass="jp.co.cyms.apps.fam007s.bean.Pam0071SBean">
+		SELECT
+		  STD.BASE_DT baseDt
+		FROM
+		  STD_MST_H STD
+		WHERE
+		  STD.SYSTEM_ID = #systemId#
+		  AND STD.LOADING_PORT_CD = #loadingPort#
+	</select>
+	<select id="getJobPatternDeadline" resultClass="jp.co.cyms.apps.fam007s.bean.JptMstBean" parameterClass="jp.co.cyms.apps.fam007s.bean.Pam0071SBean">
+		SELECT 
+			MST.JOB_PATTERN_CD jobPatternCd
+		FROM JPT_MST MST
+		WHERE 
+			MST.SYSTEM_ID = #systemId#
+			AND MST.JOB_TYPE1_CD = #type1FjParam#
+			AND MST.JOB_TYPE2_CD = #type2FjParam#
+			order by  
+			LPAD(jobPatternCd, 6)
+	</select>
+	<select id="searchJobPatternDeadline" resultClass="jp.co.cyms.apps.fam007s.bean.StdMstD1Bean" parameterClass="jp.co.cyms.apps.fam007s.bean.Pam0071SBean">
+		SELECT 
+			D1.JOB_PATTERN_CD jobPatternCd
+			,D1.DEADLINE deadLine
+			,D1.SEQ_NO seqNo
+		FROM 
+			STD_MST_D1 D1
+		WHERE 
+			D1.SYSTEM_ID = #systemId#
+			AND D1.LOADING_PORT_CD = #loadingPort#
+			AND D1.JOB_TYPE1 = #jobType1#
+			AND D1.SEQ_NO BETWEEN '01' and '05'
+	</select>
+	<select id="getJobPatternDeadlineByJobPattern" resultClass="jp.co.cyms.apps.fam007s.bean.StdMstD2Bean" parameterClass="jp.co.cyms.apps.fam007s.bean.Pam0071SBean">
+		SELECT 
+			D1.JOB_PATTERN_CD jobPatternCd
+			,D1.DEADLINE deadLine
+			,D1.SEQ_NO seqNo
+		FROM 
+			STD_MST_D1 D1
+		WHERE 
+			D1.SYSTEM_ID = #systemId#
+			AND D1.LOADING_PORT_CD = #loadingPort#
+			AND D1.JOB_TYPE1 = #jobType1#
+			AND D1.SEQ_NO =#seqNo#
+	</select>
+	<select id="getFromPlace" resultClass="jp.co.cyms.apps.fam007s.bean.JptMstBean" parameterClass="jp.co.cyms.apps.fam007s.bean.Pam0071SBean">
+		SELECT
+			U2.SHORT_NAME fromPlaceCdFullName
+			,JPT.FROM_PLACE_CD fromPlaceCd
+		FROM JPT_MST JPT
+		LEFT JOIN UN2_MST U2
+			ON U2.SYSTEM_ID       = JPT.SYSTEM_ID
+			AND U2.CD_PK          = JPT.FROM_PLACE_CD
+			AND U2.class          = #classParam#
+		WHERE JPT.system_id    = #systemId#
+			AND JPT.JOB_PATTERN_CD = #jobPatternCd#
+	</select>
+	<select id="getToPlace" resultClass="jp.co.cyms.apps.fam007s.bean.JptMstBean" parameterClass="jp.co.cyms.apps.fam007s.bean.Pam0071SBean">
+		SELECT
+			U2.SHORT_NAME toPlaceCdFullName
+			,JPT.TO_PLACE_CD toPlaceCd
+		FROM JPT_MST JPT
+		LEFT JOIN UN2_MST U2
+			ON U2.SYSTEM_ID       = JPT.SYSTEM_ID
+			AND U2.CD_PK          = JPT.TO_PLACE_CD
+			AND U2.class          = #classParam#
+		WHERE JPT.system_id    = #systemId#
+			AND JPT.JOB_PATTERN_CD = #jobPatternCd#
+	</select>
+	<select id="getToYardCdFJ" resultClass="jp.co.cyms.apps.fam007s.bean.Un3MstBean" parameterClass="jp.co.cyms.apps.fam007s.bean.Pam0071SBean">
+		SELECT 
+			U3.CD_PK cdpk
+		FROM 
+			UN3_MST U3
+		WHERE 
+			U3.SYSTEM_ID = #systemId#
+			AND U3.COLUMN_1 = #column1#
+	</select>
+	<select id="getJobDetail" resultClass="jp.co.cyms.apps.fam007s.bean.Un1MstBean" parameterClass="jp.co.cyms.apps.fam007s.bean.Pam0071SBean">
+		SELECT 
+			U1.NAME FROM UN1_MST U1
+		WHERE 
+			U1.CATEGORY = #category#
+			AND U1.CLASS = #classParam#
+			ORDER BY U1.CD_PK
+	</select>
+	<select id="getDeadlineCommon" resultClass="jp.co.cyms.apps.fam007s.bean.StdMstD2Bean" parameterClass="jp.co.cyms.apps.fam007s.bean.Pam0071SBean">
+		SELECT 
+			D2.DEADLINE deadLine,
+			D2.JOB_DETAIL_CD jobDetailCd,
+			D2.ALTERNATIVE_NAME alterNativeName
+		FROM 
+			STD_MST_D2 D2
+		WHERE 
+			D2.SYSTEM_ID = #systemId#
+			AND D2.LOADING_PORT_CD = #loadingPort#
+			AND D2.JOB_DETAIL_CD  BETWEEN '01' and '07' ORDER BY D2.JOB_DETAIL_CD
+	</select>
+	<select id="getAlternativeCommon" resultClass="jp.co.cyms.apps.fam007s.bean.StdMstD2Bean" parameterClass="jp.co.cyms.apps.fam007s.bean.Pam0071SBean">
+		SELECT D2.DEADLINE
+		  ,D2.ALTERNATIVE_NAME alterNativeName
+		  ,D2.JOB_DETAIL_CD  
+		FROM
+		  STD_MST_D2 D2
+		WHERE
+		  D2.SYSTEM_ID = #systemId#
+		  AND D2.LOADING_PORT_CD = #loadingPort#
+	</select>
+	
+	<!-- <delete id="deleteStdMstD1" parameterClass="jp.co.cyms.apps.fam007s.bean.DdlMstBean">
+		DELETE FROM DDL_MST WHERE SYSTEM_ID = #systemId# AND LOADING_PORT = #loadingPort#
+	</delete> -->
+	<insert id="insertStdMstH" parameterClass="jp.co.cyms.apps.fam007s.bean.StdMstHBean">
+		Insert into STD_MST_H 
+		(
+			SYSTEM_ID,
+			UPDATED_USER,
+			<isNotNull property="timeZone">
+				UPDATED_DT_UTC,
+			</isNotNull>
+			UPDATED_DT_SERVER,
+			LOADING_PORT_CD,
+			BASE_DT
+		) 
+		values 
+		(
+			#systemId#,
+			#updatedUser#,
+			<isNotNull property="timeZone">
+				SYSDATE -#timeZone#/24,
+			</isNotNull>
+			SYSDATE,
+			#loadingPortCd#,
+			#baseDt#
+		)
+	</insert>
+	<insert id="insertStdMstD1" parameterClass="jp.co.cyms.apps.fam007s.bean.StdMstD1Bean">
+		Insert into STD_MST_D1 
+		(
+			SYSTEM_ID,
+			UPDATED_USER,
+			<isNotNull property="timeZone">
+				UPDATED_DT_UTC,
+			</isNotNull>
+			UPDATED_DT_SERVER,
+			LOADING_PORT_CD,
+			JOB_TYPE1,
+			SEQ_NO,
+			JOB_PATTERN_CD,
+			DEADLINE
+		) 
+		values 
+		(
+			#systemId#,
+			#updatedUser#,
+			<isNotNull property="timeZone">
+				SYSDATE -#timeZone#/24,
+			</isNotNull>
+			SYSDATE,
+			#loadingPortCd#,
+			#jobType1#,
+			#seqNo#,
+			#jobPatternCd#,
+			#deadLine#
+		)
+	</insert>
+	<insert id="insertStdMstD2" parameterClass="jp.co.cyms.apps.fam007s.bean.StdMstD2Bean">
+		Insert into STD_MST_D2 
+		(
+			SYSTEM_ID,
+			UPDATED_USER,
+			<isNotNull property="timeZone">
+				UPDATED_DT_UTC,
+			</isNotNull>
+			UPDATED_DT_SERVER,
+			LOADING_PORT_CD,
+			JOB_DETAIL_CD,
+			DEADLINE,
+			ALTERNATIVE_NAME
+		) 
+		values 
+		(
+			#systemId#,
+			#updatedUser#,
+			<isNotNull property="timeZone">
+				SYSDATE -#timeZone#/24,
+			</isNotNull>
+			SYSDATE,
+			#loadingPortCd#,
+			#jobDetailCd#,
+			#deadLine#,
+			#alterNativeName#
+		)
+	</insert>
+	<update id="updateStdMstH" parameterClass="jp.co.cyms.apps.fam007s.bean.StdMstHBean">
+		UPDATE STD_MST_H
+		SET
+		  UPDATED_USER = #updatedUser#
+		  <dynamic>
+				<isNotNull property="timeZone">
+				,UPDATED_DT_UTC = SYSDATE -#timeZone#/24
+				</isNotNull>
+			</dynamic>
+		  ,UPDATED_DT_SERVER = SYSDATE,
+		  LOADING_PORT_CD = #loadingPortCd#,
+		  BASE_DT = #baseDt#
+		WHERE
+		  SYSTEM_ID = #systemId#
+		  AND LOADING_PORT_CD = #loadingPortCd#
+	</update>
+	<update id="updateStdMstD1" parameterClass="jp.co.cyms.apps.fam007s.bean.StdMstD1Bean">
+		UPDATE STD_MST_D1
+		SET
+		  UPDATED_USER = #updatedUser#,
+		  <dynamic>
+				<isNotNull property="timeZone">
+				UPDATED_DT_UTC = SYSDATE -#timeZone#/24
+				</isNotNull>
+			</dynamic>
+		  ,UPDATED_DT_SERVER = SYSDATE,
+		  JOB_TYPE1 = #jobType1#,
+		 <!--  SEQ_NO = #seqNo#, -->
+		  JOB_PATTERN_CD = #jobPatternCd#,
+		  DEADLINE = #deadLine#
+		WHERE
+		  SYSTEM_ID = #systemId#
+		  AND LOADING_PORT_CD = #loadingPortCd#
+		  AND JOB_TYPE1 = #jobType1#
+		  AND SEQ_NO = #seqNo#
+	</update>
+	<update id="updateStdMstD2" parameterClass="jp.co.cyms.apps.fam007s.bean.StdMstD2Bean">
+		UPDATE STD_MST_D2
+		SET
+		  UPDATED_USER = #updatedUser#,
+		  <dynamic>
+				<isNotNull property="timeZone">
+				UPDATED_DT_UTC = SYSDATE -#timeZone#/24
+				</isNotNull>
+			</dynamic>
+		  ,UPDATED_DT_SERVER = SYSDATE,
+		  LOADING_PORT_CD = #loadingPortCd#,
+		  <!-- JOB_DETAIL_CD = #jobDetailCd#, -->
+		  DEADLINE = #deadLine#,
+		  ALTERNATIVE_NAME = #alterNativeName#
+		WHERE
+		  SYSTEM_ID = #systemId#
+		  AND LOADING_PORT_CD = #loadingPortCd#
+		  AND JOB_DETAIL_CD = #jobDetailCd#
+	</update>
+	<delete id="deleteStdMstD1" parameterClass="jp.co.cyms.apps.fam007s.bean.StdMstD1Bean">
+		DELETE FROM STD_MST_D1 WHERE SYSTEM_ID = #systemId# AND LOADING_PORT_CD = #loadingPortCd#
+	</delete>
+</sqlMap>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+            PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+            "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="FAA001">
+	<!-- Check user login -->
+	<select id="select01" resultClass="jp.co.cyms.apps.faa001.bean.UserBean">
+		SELECT UN3.CD_PK AS userId,
+		    UN3.NAME        AS userName,
+		    UN3.COLUMN_1    AS userPassword,
+		    UN3.COLUMN_2    AS userCompanyCd,
+		    UN3.COLUMN_3    AS userAuthorityCd ,
+		    UN3.COLUMN_4    AS territoryCd,
+        UN1.NAME        AS userAuthorityName,
+        UN2.SHORT_NAME  AS userCompanyName
+		  FROM UN3_MST UN3
+      LEFT JOIN UN1_MST UN1 ON UN3.COLUMN_3 = UN1.CD_PK
+      AND UN1.CATEGORY = 'LBL' AND UN1.CLASS = '01'
+      LEFT JOIN UN2_MST UN2 ON UN3.COLUMN_2 = UN2.CD_PK
+      AND UN2.SYSTEM_ID = #systemId# AND UN2.CLASS = '01'
+		  WHERE UN3.SYSTEM_ID = #systemId#
+		  AND UN3.CATEGORY    ='DAT'
+		  AND UN3.CLASS       ='01'
+		  AND UN3.CD_PK         = #userId#
+		  AND UN3.COLUMN_1   = #userPassword#
+	</select>
+
+	<!-- Get all system group -->
+	<select id="select02" resultClass="jp.co.cyms.apps.faa001.bean.SystemGroupBean">
+		SELECT CD_PK AS systemId,
+		  NAME       AS systemName,
+		  COLUMN_1   AS systemType
+		FROM UN1_MST
+		WHERE CATEGORY ='DAT'
+		AND CLASS      ='01'
+	</select>
+
+	<!-- Get menu with AuthCd-->
+	<select id="select03" resultClass="jp.co.cyms.apps.faa001.bean.MenuBean">
+		SELECT
+		  mnu.MENU_ID       AS menuId,
+		  mnu.SCREEN_ID     AS screenId,
+		  mnu.NAME          AS menuName,
+		  mnu.FUNCTION_ID   AS functionId,
+		  mnu.ORDER_ID AS orderDisplay
+		FROM MNU_MST mnu JOIN ACL_MST acl
+		ON acl.SYSTEM_ID=#systemId#
+			AND acl.AUTHORIZATION_CD = #userAuthorityCd#
+			AND acl.MENU_ID = mnu.MENU_ID
+		ORDER BY mnu.GROUP_ID,
+		  mnu.ORDER_ID
+	</select>
+
+	<!-- Check permission-->
+	<select id="select04" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		SELECT count(*)
+		FROM ACL_MST acl JOIN MNU_MST mnu
+		ON acl.SYSTEM_ID=#systemId#
+			AND acl.AUTHORIZATION_CD = #userAuthorityCd#
+			AND acl.MENU_ID = mnu.MENU_ID
+			AND mnu.SCREEN_ID=#screenId#
+			AND mnu.FUNCTION_ID=#functionId#
+	</select>
+
+	<!-- Get ut1mst-->
+	<select id="select05" resultClass="jp.co.cyms.apps.faa001.bean.Un1MstBean">
+		SELECT CATEGORY category,
+		  CLASS clazz,
+		  CD_PK cdPk,
+		  NAME name,
+		  COLUMN_1 column1,
+		  COLUMN_2 column2,
+		  COLUMN_3 column3,
+		  COLUMN_4 column4,
+		  COLUMN_5 column5,
+		  TIME_1 time1,
+		  UPDATE_USER updateUser,
+		  UPDATED_DT_UTC updateDtUtc,
+		  UPDATED_DT_SERVER updateDtServer,
+		  EXCLUSIVE_FG exclusiveFg
+		FROM UN1_MST
+		WHERE CATEGORY = #category#
+		AND CLASS = #clazz#
+		AND CD_PK = #cdPk#
+	</select>
+</sqlMap>
